@@ -1,0 +1,53 @@
+<div id = "template" class = "graphbox">
+	<div class="box box-primary">
+		<div class="box-header with-border">
+			<h3 id="box_title" class="box-name box-title"></h3>
+			<div class="box-tools pull-right">
+				<button type="button" class="btn btn-box-tool graph"><i class="fa fa-bar-chart-o"></i></button>
+				<button type="button" class="btn btn-box-tool box_name" ><i class="fa fa-wrench"></i></button>
+				<button type="button" class="btn btn-box-tool window"><i class="fa fa-clone"></i></button>
+				<button type="button" class="btn btn-box-tool cls"><i class="fa fa-times"></i></button>
+			</div>
+		</div>
+		<div class="box-body original">
+			<!--グラフが入る-->
+		</div>
+	</div>
+</section>
+</div>
+<!--ここからぐらふ-->
+<div id="graph-template" class="branch box-body" style="border-bottom:solid; border-bottom-color: #3c8dbc">
+	<div class="box-header">
+		<div class="kikan">
+		</div>
+		<!--<div class="box-tools pull-right dataset" data-toggle="btn-toggle">-->
+		<!--	<button type="button" class="btn btn-box-tool disp" data-toggle="modal" data-target="#modal-setting"><i class="fa fa-wrench"></i></button>-->
+		<!--	<button type="button" class="btn btn-box-tool remove" ><i class="fa fa-times"></i></button>-->
+		<!--</div>-->
+	</div>
+	<div class="box-body">
+		<div id="chart" class="chart-type" style="width: 100%; height:150px; margin:0 auto; padding:0;">
+		</div>
+	</div>
+</div>
+<!--modal template-->
+<div class="modal" id="modal-template" tabindex="-1">
+  	<div class="modal-dialog">
+      	<div class="modal-content">
+          	<div class="modal-header">
+              	<button type="button" class="close" data-dismiss="modal">
+                  	<span aria-hidden="true">&times;</span>
+              	</button>
+              	<h4 class="modal-title" id="modal-label">Setting</h4>
+          	</div>
+        	<form id="form_template" class="board-form" name="myForm">
+          	<div id="modal-form" class="modal-body">
+            	<!--モーダルのフォーム-->
+          	</div>
+          	<div id="modal-function" class="modal-footer">
+              	<!--モーダルのボタン-->
+          	</div>
+        	</form>
+      	</div>
+  	</div>
+</div>

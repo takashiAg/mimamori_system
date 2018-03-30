@@ -1,0 +1,49 @@
+<?php
+if(isset($_GET["user"])){
+	$user = $_GET["user"];
+//	$startday = $_GET["startday"];
+//	$stopday = $_GET["stopday"];
+//	$startday = mktime(0,0,0,$_GET["Mb"],$_GET["Db"],$_GET["Yb"]);
+	$stopday = mktime(0,0,0,$_GET["Ma"],$_GET["Da"],$_GET["Ya"]);
+//	$day = $startday;
+	$i=0;
+	$k=0;
+	if($_GET["type"]=="power"){
+		$dataplace=12;
+		$datalength=16;
+	}else if($_GET["type"]=="count"){
+		$dataplace=9;
+		$datalength=17;
+	}else if($_GET["type"]=="humi"){
+		$dataplace=9;
+		$datalength=15;
+	}else{
+		$dataplace=9;
+		$datalength=15;
+	}
+	do{
+		$unixtime = mktime(0,0,0,$_GET["Mb"],$_GET["Db"]+$i,$_GET["Yb"]);
+		$day = date("Y-m-d",$unixtime);
+		if(file_exists("data/".$user."/".$day.".csv")){
+			$file = fopen("data/".$user."/".$day.".csv", "r");
+			if($file){
+				$j=0;
+				while($line = fgets($file)){
+					$explode = explode(",",$line);
+					if(isset($explode[$dataplace])&&$explode[$dataplace]!=""&&$explode[$dataplace]!="nan"&&$explode[$dataplace]<5000&&count($explode)==$datalength){
+					$result[$k][$j++] = [$explode[0],$explode[1],$explode[2],$explode[$dataplace]];
+					}
+				}
+			}
+		}else{
+			$result[$k] = [];
+		}
+			$k++;
+		$i++;
+	}while($unixtime != $stopday);
+	fclose($file);
+}
+$result = json_encode($result);
+header('Content-type:application/json; charset=utf8');
+echo $result;
+?>

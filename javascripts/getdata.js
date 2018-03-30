@@ -1,0 +1,409 @@
+
+var dataget = function(){
+	this.name = "";
+	this.pass = "";
+	this.dateafter = [];
+	this.datebefore = [];
+	this.sensor_id = "";
+	this.response = [[],[],[]];
+	this.power_resolution =60
+	this.count_resolution =10
+    this.power = function(){
+        var resp;
+        var before=this.datebefore[0]+"-"+this.datebefore[1]+"-"+this.datebefore[2]+" "+this.datebefore[3]+":"+this.datebefore[4]+":00";
+        var after=this.dateafter[0]+"-"+this.dateafter[1]+"-"+this.dateafter[2]+" "+this.dateafter[3]+":"+this.dateafter[4]+":00";
+        this.datebefore[0]
+        $.ajaxSetup({async: false});
+        $.getJSON('../data.php',{'user':this.sensor_id,'type':"power",'before':before,'after':after},function(response,status,xhr){
+            resp = response;
+        });
+        $.ajaxSetup({async: true});
+        var count=0;
+        var flag=0;
+        var date=new Date(before.replace(/-/g,"/"))
+
+        var after_date=new Date(after.replace(/-/g,"/"))
+        if(resp){
+            var i=0;
+            var flg=false;
+            while(date<after_date){
+                date.setMinutes(date.getMinutes()+1);
+                if(resp[i]){
+                    if(new Date(resp[i][0].replace(/-/g,"/"))<date){
+                        if(flg==true){
+                            this.response[0].push(new Date(resp[i][0].replace(/-/g,"/")))
+                            this.response[1].push(0)
+                            flg=false
+                        }
+                        var sametiming=true
+                        first=true;
+                        while(sametiming==true){
+                            sametiming=false
+                            var this_day=new Date(resp[i][0].replace(/-/g,"/"))
+                            if(!first){
+                                //if(this_day.getTime-this.response[0][this.response[0].length-1].getTime<5*60*1000){
+                                this.response[0].push(new Date(this_day.toString()))
+                                this.response[1].push(resp[i][1]*2.2)
+                            }else{
+                                first=false
+                            }
+                            if(resp[i+1]){
+                                var nextdate=new Date(resp[i+1][0].replace(/-/g,"/"));
+                                if(nextdate.getTime()-date.getTime()<5*60*1000){
+                                    sametiming=true
+                                    i++
+                                }
+                            }
+                        }
+                        if(resp[i+1]){
+                            var nextdate=new Date(resp[i+1][0].replace(/-/g,"/"));
+                            if(nextdate.getTime()-date.getTime()>30*1000*60){
+                                this.response[0].push(new Date(resp[i][0].replace(/-/g,"/")))
+                                this.response[1].push(0)
+                                flg=true
+                            }
+                        }else{
+                            this.response[0].push(new Date(resp[i][0].replace(/-/g,"/")))
+                            this.response[1].push(0)
+                        }
+                        i++
+                    }
+                }
+            }
+            this.response[0].push(new Date(date.toString()))
+            this.response[1].push(0)
+        }
+        this.response[0].pop()
+        this.response[1].pop()
+        return this.response;
+    };
+
+    //==========================================================================================================================================================
+    this.power2 = function(){
+        var resp;
+        var before=this.datebefore[0]+"-"+this.datebefore[1]+"-"+this.datebefore[2]+" "+this.datebefore[3]+":"+this.datebefore[4]+":00";
+        var after=this.dateafter[0]+"-"+this.dateafter[1]+"-"+this.dateafter[2]+" "+this.dateafter[3]+":"+this.dateafter[4]+":00";
+        this.datebefore[0]
+        $.ajaxSetup({async: false});
+        $.getJSON('../data.php',{'user':this.sensor_id,'type':"power",'before':before,'after':after},function(response,status,xhr){
+            resp = response;
+        });
+        $.ajaxSetup({async: true});
+        var count=0;
+        var flag=0;
+        var date=new Date(before.replace(/-/g,"/"))
+
+        var after_date=new Date(after.replace(/-/g,"/"))
+        if(resp){
+            var i=0;
+            var flg=false;
+            while(date<after_date){
+                date.setMinutes(date.getMinutes()+1);
+                if(resp[i]){
+                    if(new Date(resp[i][0].replace(/-/g,"/"))<date){
+                        if(flg==true){
+                            this.response[0].push(new Date(resp[i][0].replace(/-/g,"/")))
+                            this.response[1].push(0)
+                            flg=false
+                        }
+                        var sametiming=true
+                        first=true;
+                        while(sametiming==true){
+                            sametiming=false
+                            var this_day=new Date(resp[i][0].replace(/-/g,"/"))
+                            if(!first){
+                                //if(this_day.getTime-this.response[0][this.response[0].length-1].getTime<5*60*1000){
+                                this.response[0].push(new Date(this_day.toString()))
+                                this.response[1].push(resp[i][1]*1.2)
+                            }else{
+                                first=false
+                            }
+                            if(resp[i+1]){
+                                var nextdate=new Date(resp[i+1][0].replace(/-/g,"/"));
+                                if(nextdate.getTime()-date.getTime()<5*60*1000){
+                                    sametiming=true
+                                    i++
+                                }
+                            }
+                        }
+                        if(resp[i+1]){
+                            var nextdate=new Date(resp[i+1][0].replace(/-/g,"/"));
+                            if(nextdate.getTime()-date.getTime()>30*1000*60){
+                                this.response[0].push(new Date(resp[i][0].replace(/-/g,"/")))
+                                this.response[1].push(0)
+                                flg=true
+                            }
+                        }else{
+                            this.response[0].push(new Date(resp[i][0].replace(/-/g,"/")))
+                            this.response[1].push(0)
+                        }
+                        i++
+                    }
+                }
+            }
+            this.response[0].push(new Date(date.toString()))
+            this.response[1].push(0)
+        }
+        this.response[0].pop()
+        this.response[1].pop()
+        return this.response;
+    };
+
+    //==========================================================================================================================================================
+    this.power3 = function(){
+        var resp;
+        var before=this.datebefore[0]+"-"+this.datebefore[1]+"-"+this.datebefore[2]+" "+this.datebefore[3]+":"+this.datebefore[4]+":00";
+        var after=this.dateafter[0]+"-"+this.dateafter[1]+"-"+this.dateafter[2]+" "+this.dateafter[3]+":"+this.dateafter[4]+":00";
+        this.datebefore[0]
+        $.ajaxSetup({async: false});
+        $.getJSON('../data.php',{'user':this.sensor_id,'type':"power",'before':before,'after':after},function(response,status,xhr){
+            resp = response;
+        });
+        $.ajaxSetup({async: true});
+        var count=0;
+        var flag=0;
+        var date=new Date(before.replace(/-/g,"/"))
+
+        var after_date=new Date(after.replace(/-/g,"/"))
+        if(resp){
+            var i=0;
+            var flg=false;
+            while(date<after_date){
+                date.setMinutes(date.getMinutes()+1);
+                if(resp[i]){
+                    if(new Date(resp[i][0].replace(/-/g,"/"))<date){
+                        if(flg==true){
+                            this.response[0].push(new Date(resp[i][0].replace(/-/g,"/")))
+                            this.response[1].push(0)
+                            flg=false
+                        }
+                        var sametiming=true
+                        first=true;
+                        while(sametiming==true){
+                            sametiming=false
+                            var this_day=new Date(resp[i][0].replace(/-/g,"/"))
+                            if(!first){
+                                //if(this_day.getTime-this.response[0][this.response[0].length-1].getTime<5*60*1000){
+                                this.response[0].push(new Date(this_day.toString()))
+                                this.response[1].push(resp[i][1]*3.87)
+                            }else{
+                                first=false
+                            }
+                            if(resp[i+1]){
+                                var nextdate=new Date(resp[i+1][0].replace(/-/g,"/"));
+                                if(nextdate.getTime()-date.getTime()<5*60*1000){
+                                    sametiming=true
+                                    i++
+                                }
+                            }
+                        }
+                        if(resp[i+1]){
+                            var nextdate=new Date(resp[i+1][0].replace(/-/g,"/"));
+                            if(nextdate.getTime()-date.getTime()>30*1000*60){
+                                this.response[0].push(new Date(resp[i][0].replace(/-/g,"/")))
+                                this.response[1].push(0)
+                                flg=true
+                            }
+                        }else{
+                            this.response[0].push(new Date(resp[i][0].replace(/-/g,"/")))
+                            this.response[1].push(0)
+                        }
+                        i++
+                    }
+                }
+            }
+            this.response[0].push(new Date(date.toString()))
+            this.response[1].push(0)
+        }
+        this.response[0].pop()
+        this.response[1].pop()
+        return this.response;
+    };
+
+    //==========================================================================================================================================================
+	this.humi = function(){
+		var resp;
+    	var before=this.datebefore[0]+"-"+this.datebefore[1]+"-"+this.datebefore[2]+" "+this.datebefore[3]+":"+this.datebefore[4]+":00";
+		var after=this.dateafter[0]+"-"+this.dateafter[1]+"-"+this.dateafter[2]+" "+this.dateafter[3]+":"+this.dateafter[4]+":00";
+		$.ajaxSetup({async: false});
+		$.getJSON('../data.php',{'user':this.sensor_id,'type':"humi",'before':before,'after':after},function(response,status,xhr){
+			resp = response;
+		});
+		$.ajaxSetup({async: true});
+		var count=0;
+		var flag=0;
+		var date=new Date(before.replace(/-/g,"/"))
+		
+		var after_date=new Date(after.replace(/-/g,"/"))
+		if(resp){
+			var i=0;
+			var flg=false;
+			while(date<after_date){
+				date.setMinutes(date.getMinutes()+1);
+				/*if(resp[i]){if(!(new Date(resp[i][0])<date+5*60*1000)){if(resp[i+1]){if(!(new Date(resp[i+1][0])>date-5*60*1000)){
+					this.response[0].push(date.getFullYear()+"/"+date.getMonth()+"/"+date.getDay()+" "+date.getHours()+":"+date.getMinutes()+":00")
+					this.response[1].push(0)
+				}else{
+					this.response[0].push(date.getFullYear()+"/"+date.getMonth()+"/"+date.getDay()+" "+date.getHours()+":"+date.getMinutes()+":00")
+					this.response[1].push(0)
+				}}}else{
+					this.response[0].push(date.getFullYear()+"/"+date.getMonth()+"/"+date.getDay()+" "+date.getHours()+":"+date.getMinutes()+":00")
+					this.response[1].push(0)
+				}}*/
+				if(resp[i]){
+					if(new Date(resp[i][0].replace(/-/g,"/"))<date){
+						if(flg==true){
+							this.response[0].push(new Date(date.toString()))
+							this.response[1].push(0)
+							flg=false
+						}
+						var sametiming=true
+						while(sametiming==true){
+							sametiming=false
+							this.response[0].push(new Date(date.toString()))
+							this.response[1].push(resp[i][1])
+							if(resp[i+1]){
+								var nextdate=new Date(resp[i+1][0].replace(/-/g,"/"));
+								//if(nextdate.getTime()-date.getTime()<1*1000*60){
+								//	sametiming=true
+								//}
+							}
+						}
+						if(resp[i+1]){
+							var nextdate=new Date(resp[i+1][0].replace(/-/g,"/"));
+							if(nextdate.getTime()-date.getTime()>5*1000*60){
+								this.response[0].push(new Date(date.toString()))
+								this.response[1].push(0)
+								flg=true
+							}
+						}else{
+							this.response[0].push(new Date(date.toString()))
+							this.response[1].push(0)
+						}
+						i++
+					}
+				}
+			}
+		}
+							this.response[0].pop()
+							this.response[1].pop()
+        return this.response;
+	};	
+	
+	//==========================================================================================================================================================
+	this.count = function(){
+		var resp;
+		var before=this.datebefore[0]+"-"+this.datebefore[1]+"-"+this.datebefore[2]+" "+this.datebefore[3]+":"+this.datebefore[4]+":00";
+		var after=this.dateafter[0]+"-"+this.dateafter[1]+"-"+this.dateafter[2]+" "+this.dateafter[3]+":"+this.dateafter[4]+":00";
+		$.ajaxSetup({async: false});
+		$.getJSON('../data.php',{'user':this.sensor_id,'type':"power",'before':before,'after':after},function(response,status,xhr){
+			resp = response;
+		});
+		$.ajaxSetup({async: true});
+		var count=0;
+		var flag=0;
+		var date=new Date(before.replace(/-/g,"/"))
+		console.log(before)
+		
+		var after_date=new Date(after.replace(/-/g,"/"))
+		if(resp){
+			var i=0;
+			var flg=true;
+			this.response[0].push(new Date(date.toString()))
+			this.response[1].push(0)
+			while(date<after_date){
+				this.response[0].push(new Date(date.toString()))
+				this.response[1].push(0)
+				date.setMinutes(date.getMinutes()+5);
+				var flg=true;
+				while(flg){
+					flg=false;
+					if(resp[i]){
+						if(new Date(resp[i][0].replace(/-/g,"/"))<date){
+							this.response[1][this.response[1].length-1]++
+							if(resp[i+1]){
+								var nextdate=new Date(resp[i+1][0].replace(/-/g,"/"));
+								if(nextdate.getTime()-date.getTime()<5*1000*60){
+									flg=true;
+								}
+							}
+						i++
+						}
+					}else{
+						i++
+					}
+				}
+			}
+			this.response[0].push(new Date(after_date.toString()))
+			this.response[1].push(0)
+		}
+        return this.response;
+	};	
+	this.table = function(){
+		var resp;
+    	$.ajaxSetup({async: false});
+    	$.getJSON('../data.php',{'user':'a','Yb':this.datebefore[0]+"",'Mb':this.datebefore[1]+"",'Db':this.datebefore[2]+"",'Ya':this.dateafter[0]+"",'Ma':this.dateafter[1]+"",'Da':this.dateafter[2]+""},function(response,status,xhr){
+			resp = response;
+		});
+		$.ajaxSetup({async: true});
+		if(resp!=[]){
+		for(var i=0;i<resp.length;i++){
+			if(resp[i]!=0){
+				for(var j=0;j<resp[i].length;j++){
+					this.response[0].push(new Date(this.datebefore[0],this.datebefore[1]-1,this.datebefore[2]+i,resp[i][j][0],resp[i][j][1],resp[i][j][2]))
+					this.response[1].push(resp[i][j][3])
+				}
+			}
+		}
+		}
+        return this.response;
+	};
+};
+var csv_get=function(){
+	this.dateafter = [];
+	this.datebefore = [];
+	this.sensor_id = "";
+	this.power=function(){
+		var before=this.datebefore[0]+"-"+this.datebefore[1]+"-"+this.datebefore[2]+" "+this.datebefore[3]+":"+this.datebefore[4]+":00";
+		var after=this.dateafter[0]+"-"+this.dateafter[1]+"-"+this.dateafter[2]+" "+this.dateafter[3]+":"+this.dateafter[4]+":00";
+		var get_value={'user':this.sensor_id,'type':this.type,'before':before,'after':after}
+		var uri="/getcsv.php?"
+		$.each(get_value,function(name,value){
+			if(uri=="/getcsv.php?"){
+				uri += name + "=" + value
+			}else{
+				uri += "&"+name + "=" + value
+			}
+		});
+		//alert(uri);
+		window.open(uri)
+		/*$.get('/getcsv.php',{'user':this.sensor_id,'Yb':this.datebefore[0]+"",'Mb':this.datebefore[1]+"",'Db':this.datebefore[2]+"",'Ya':this.dateafter[0]+"",'Ma':this.dateafter[1]+"",'Da':this.dateafter[2]+""},function(data,status,xhr){
+			alert("Data Loaded: " + data);
+		});*/
+	};
+}
+
+function strtodate(year,month,day,hour,min){
+	var datestring=year+"-"
+	if(month<10){
+		datestring+="0"+month+"-"
+	}else{
+		datestring+=month+"-"
+	}
+	if(day<10){
+		datestring+="0"+day+" "
+	}else{
+		datestring+=day+" "
+	}
+	if(hour<10){
+		datestring+="0"+hour+":"
+	}else{
+		datestring+=hour+":"
+	}
+	if(min<10){
+		datestring+="0"+min+""
+	}else{
+		datestring+=min+""
+	}
+	return datestring
+}
